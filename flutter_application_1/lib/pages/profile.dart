@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("users")
+            .collection("Users")
             .doc(currentUser.email)
             .snapshots(),
         builder: (context, snapshot) {
