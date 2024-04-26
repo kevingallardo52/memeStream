@@ -38,6 +38,8 @@ class AuthService extends ChangeNotifier {
         await _firestore.collection('users').doc(user.uid).set({
           'uid': user.uid,
           'email': email,
+          'username': email.split('@')[0],
+          'bio': 'Empty bio...',
         });
       }
     } catch (e) {

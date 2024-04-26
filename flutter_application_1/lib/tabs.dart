@@ -18,7 +18,7 @@ class _TabsControllerState extends State<TabsController> {
     HomePage(),
     Stream(),
     Add(),
-    Profile(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
