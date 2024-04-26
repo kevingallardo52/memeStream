@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
@@ -25,12 +27,21 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    final authService = Provider.of<AuthService>(context, listen: false);
     try {
-      await authService.signUpWithEmailandPassword(
-        emailController.text,
-        passwordController.text,
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
       );
+
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        "username": emailController.text.split("@")[0],
+        "bio": "Empty bio.."
+      });
+
       // Navigate to login or home page on successful sign up
       // Navigator.of(context).pushReplacementNamed('/home'); // Example navigation
     } catch (e) {
