@@ -42,13 +42,10 @@ class AuthService extends ChangeNotifier {
         await _firestore.collection('Users').doc(user.uid).set({
           'username': email.split('@')[0],
           'bio': 'Empty bio...',
+          'imageLink':
+              'https://images.unsplash.com/photo-1497752531616-c3afd9760a11?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFjb29ufGVufDB8fDB8fHww',
         });
       }
-
-      FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({"username": email, "bio": "Empty bio.."});
     } catch (e) {
       throw Exception(e);
     }
