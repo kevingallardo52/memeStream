@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/add.dart';
 import 'package:flutter_application_1/pages/profile.dart';
 import 'package:flutter_application_1/pages/stream.dart';
 
@@ -16,6 +17,7 @@ class _TabsControllerState extends State<TabsController> {
   static const List _pages = [
     HomePage(),
     Stream(),
+    Add(),
     ProfilePage(),
   ];
 
@@ -38,6 +40,10 @@ class _TabsControllerState extends State<TabsController> {
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.mail),
               label: 'Stream',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.add_circled_solid),
+              label: 'Add',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.profile_circled),
