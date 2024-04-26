@@ -44,6 +44,11 @@ class AuthService extends ChangeNotifier {
           'bio': 'Empty bio...',
         });
       }
+
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({"username": email, "bio": "Empty bio.."});
     } catch (e) {
       throw Exception(e);
     }
