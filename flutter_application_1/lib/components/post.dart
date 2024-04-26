@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/comment.dart';
 import 'package:flutter_application_1/components/comment_button.dart';
+import 'package:flutter_application_1/components/delete_button.dart';
 import 'package:flutter_application_1/components/like_button.dart';
 import 'package:flutter_application_1/helper/helper_methods.dart';
 
@@ -108,6 +109,54 @@ class _PostState extends State<Post> {
             ));
   }
 
+  // delete post
+  void deletePost() {
+    // dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Post"),
+        content: const Text("Are you sure you want to delete this post?"),
+        actions: [
+          // cancel
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
+          TextButton(
+              onPressed: () async {
+                //delete comments first
+                final commentDocs = await FirebaseFirestore.instance
+                    .collection("User Posts")
+                    .doc(widget.postId)
+                    .collection("Comments")
+                    .get();
+
+                for (var doc in commentDocs.docs) {
+                  await FirebaseFirestore.instance
+                      .collection("User Posts")
+                      .doc(widget.postId)
+                      .collection("Comments")
+                      .doc(doc.id)
+                      .delete();
+                }
+                // delete post
+                FirebaseFirestore.instance
+                    .collection("User Posts")
+                    .doc(widget.postId)
+                    .delete()
+                    .then((value) => print("Post deleted"))
+                    .catchError(
+                        (error) => print("Failed to delete psot: $error"));
+
+                // dismiss dialog box
+                Navigator.pop(context);
+              },
+              child: const Text("Delete"))
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,33 +168,42 @@ class _PostState extends State<Post> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // post
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //message
-              Text(widget.message),
-
-              const SizedBox(
-                height: 5,
-              ),
-
-              // user
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.user,
-                    style: TextStyle(color: Colors.grey[500]),
+                  //message
+                  Text(widget.message),
+
+                  const SizedBox(
+                    height: 5,
                   ),
-                  Text(
-                    " . ",
-                    style: TextStyle(color: Colors.grey[500]),
-                  ),
-                  Text(
-                    widget.time,
-                    style: TextStyle(color: Colors.grey[500]),
+
+                  // user
+                  Row(
+                    children: [
+                      Text(
+                        widget.user,
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                      Text(
+                        " . ",
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                      Text(
+                        widget.time,
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              // delete button
+              if (widget.user == currentUser.email)
+                DeleteButton(onTap: deletePost),
             ],
           ),
 

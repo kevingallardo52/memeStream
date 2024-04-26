@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/components/my_text_field.dart';
@@ -111,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   //post button
                   IconButton(
                       onPressed: postMessage,
-                      icon: const Icon(Icons.arrow_circle_up))
+                      icon: const Icon(CupertinoIcons.add_circled_solid))
                 ],
               ),
             ),
