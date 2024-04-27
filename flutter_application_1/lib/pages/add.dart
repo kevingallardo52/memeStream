@@ -135,7 +135,7 @@ class _AddState extends State<Add> {
                   Expanded(
                     child: MyTextField(
                       controller: textController,
-                      hintText: 'Post to the memeStream...',
+                      hintText: 'Post to the MemeStream...',
                       obscureText: false,
                     ),
                   ),

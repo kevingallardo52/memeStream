@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Text("meme Stream"),
+        title: Text("MemeStream"),
         actions: [
           //sign out button
           IconButton(onPressed: signOut, icon: Icon(Icons.logout)),
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: MyTextField(
                       controller: textController,
-                      hintText: 'Post to the memeStream...',
+                      hintText: 'Post to the MemeStream...',
                       obscureText: false,
                     ),
                   ),
