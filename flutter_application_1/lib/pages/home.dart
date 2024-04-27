@@ -1,10 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/components/my_text_field.dart';
 import 'package:flutter_application_1/components/post.dart';
+
 import 'package:flutter_application_1/helper/helper_methods.dart';
+import 'package:flutter_application_1/resources/add_post_image.dart';
+import 'package:flutter_application_1/utils.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,13 +27,38 @@ class _HomePageState extends State<HomePage> {
 //text controller
   final textController = TextEditingController();
 
+  String URL = "";
+
+  Uint8List? _image;
+
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  Future<void> saveImage() async {
+    if (_image != null) {
+      URL = await StoreImage().saveData(
+          file: _image!,
+          name: DateTime.now().millisecondsSinceEpoch.toString());
+    } else {
+      URL = '';
+    }
+    setState(() {
+      _image = null;
+    });
+  }
+
 //sign out
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
 
 // post message
-  void postMessage() {
+  Future<void> postMessage() async {
+    saveImage();
     // do not post empty string
     if (textController.text.isNotEmpty) {
       // store in firebase
@@ -35,6 +67,7 @@ class _HomePageState extends State<HomePage> {
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
+        "imageURL": URL,
       });
     }
 
@@ -76,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                         // get the message
                         final post = snapshot.data!.docs[index];
                         return Post(
+                          imageURL: post['imageURL'],
                           message: post['Message'],
                           user: post['UserEmail'],
                           postId: post.id,
@@ -109,6 +143,11 @@ class _HomePageState extends State<HomePage> {
                       obscureText: false,
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {
+                        selectImage();
+                      },
+                      icon: const Icon(CupertinoIcons.camera)),
                   //post button
                   IconButton(
                       onPressed: postMessage,

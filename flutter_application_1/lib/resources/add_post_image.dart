@@ -8,7 +8,7 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final currentUser = FirebaseAuth.instance.currentUser!;
 
-class StoreData {
+class StoreImage {
   Future<String> uploadImageToStorage(String childName, Uint8List file) async {
     Reference ref = _storage.ref().child(childName);
     UploadTask uploadTask = ref.putData(file);
@@ -23,12 +23,9 @@ class StoreData {
   }) async {
     String resp = "Some Error";
     try {
-      String imageUrl = await uploadImageToStorage("profileImage" + name, file);
-      await _firestore.collection("Users").doc(currentUser.uid).update({
-        'imageLink': imageUrl,
-      });
+      String imageUrl = await uploadImageToStorage("postImage" + name, file);
       //userCollection.doc(currentUser.email).update({field: newValue});
-      resp = "success";
+      resp = imageUrl;
     } catch (err) {
       resp = err.toString();
     }

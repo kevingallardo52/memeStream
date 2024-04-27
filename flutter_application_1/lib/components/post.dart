@@ -12,9 +12,11 @@ class Post extends StatefulWidget {
   final String user;
   final String time;
   final String postId;
+  final String imageURL;
   final List<String> likes;
   const Post({
     super.key,
+    required this.imageURL,
     required this.message,
     required this.user,
     required this.postId,
@@ -175,6 +177,14 @@ class _PostState extends State<Post> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //image
+                  (widget.imageURL != '')
+                      ? Center(
+                          child: Image(
+                            image: NetworkImage(widget.imageURL, scale: 10),
+                          ),
+                        )
+                      : const SizedBox(),
                   //message
                   Text(widget.message),
 

@@ -34,7 +34,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void saveImage() async {
-    await StoreData().saveData(file: _image!);
+    await StoreData().saveData(
+        file: _image!, name: DateTime.now().millisecondsSinceEpoch.toString());
+
+    setState(() {
+      _image = null;
+    });
   }
 
   // Edit field
